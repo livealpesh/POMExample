@@ -21,5 +21,14 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.seleniumhq.webdriver/webdriver-selenium -->
+    <dependency>
+      <groupId>org.seleniumhq.webdriver</groupId>
+      <artifactId>webdriver-selenium</artifactId>
+      <version>0.9.7376</version>
+    </dependency>
+
+
   </dependencies>
 </project>
