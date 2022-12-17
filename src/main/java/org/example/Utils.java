@@ -1,0 +1,106 @@
+package org.example;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+
+//only this class have a static method
+//all reusable method are write down here in this class
+////Utils class inheriting the properties of BasePage
+public class Utils extends BasePage{
+    //Reusable method clickOnElement() for clicking on element
+    public static void clickOnElement(By by) {
+        //To 'findElement' with object(driver) of its class and to perform click action
+        driver.findElement(by).click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    }
+
+    //Reusable method typeText() for entering the text in string format
+    public static void typeText(By by, String text) {
+//To 'findElement' with object(driver) of its class and to perform senKeys action to enter text
+        driver.findElement(by).sendKeys(text);
+    }
+    //Reusable method getTextFromElement() for getting the text from element
+    public static String getTextFromElement(By by) {
+        //To 'findElement' with object(driver) of its class and to perform getText action to get the string value
+        return driver.findElement(by).getText();
+    }
+
+    //Reusable method getTimeStamp() for time stamp
+    public static String getTimeStamp()
+    {
+        //storing current year month  date hour minute and seconds in variable timeStamp
+        return  new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+
+    }
+
+//  after selenium 4 version wait method calling by below syntax
+    //Reusable method waitForElementToBeClickable() for driver to wait for until particular element is clicked
+
+    public static void waitForElementToBeClickable(By by, int timeOfSecond) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOfSecond));
+        wait.until(ExpectedConditions.elementToBeClickable(by));
+    }
+    //Reusable method waitForElementToBeVisible() for driver to wait for until particular element is visible
+
+    public static void waitForElementToBeVisible(By by, int timeOfSecond) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOfSecond));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+    //Reusable method waitForUrlTOBe() for driver to wait for URL explicitly
+    public static void waitForUrlTobe(String url, int timeOfSecond) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOfSecond));
+        wait.until(ExpectedConditions.urlToBe(url));
+    }
+    //Reusable method selectFromDropDownByIndex() for select the element by index
+    public static void selectFromDropByIndex(By by, int index) {
+        //Using select class with its object to select the month using findElement function
+        Select selectDay = new Select(driver.findElement(by));
+        // To select year using selectByIndex function
+        selectDay.selectByIndex(index);
+    }
+    //Reusable method selectFromDropDownByValue() for select the element by its value
+    public static void selectFromDropdownByValue(By by, String selectValue) {
+        //Using select class with its object to select the month using findElement function
+        Select selectYear = new Select(driver.findElement(by));
+        // To select Month  using selectByValue function
+        selectYear.selectByValue(selectValue);
+    }
+    //Reusable method selectFromDropDownByVisibleText() for select the element by its visible text
+    public static void selectFromDropdownByVisibleText(By by, String visibleText) {
+        //Using select class with its object to select the day using findElement function
+        Select selectMonth = new Select(driver.findElement(by));
+        // To select day using selectByVisibleText function
+        selectMonth.selectByVisibleText(visibleText);
+    }
+    //    assert apply for feature file in bdd category feature file for verify we are in category link
+    public static void assertCurrentURL(String categoryName){
+       Assert.assertTrue(driver.getCurrentUrl().contains(categoryName));
+
+    }
+
+    //creating method to take a screen shoot by getting name of the class and the time
+    public static void captureAScreenShot(String screenShootName){
+        TakesScreenshot screenShoot =((TakesScreenshot)driver);
+        File SourceFile =screenShoot.getScreenshotAs(OutputType.FILE);
+        File DestFile=new File("src/ScreenShoot/"+screenShootName+getTimeStamp()+".jpg");
+        try {
+            FileUtils.copyFile(SourceFile,DestFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+}
